@@ -106,4 +106,23 @@ class LgtbotTest {
             assertFalse(lgtbot.getMaoDeOnzeResponse(stepBuilder.build()));
         }
     }
+
+    @Test
+    @DisplayName("Bot decide pedir truco quando tem cartas fortes")
+    public void testShouldRaisePoints_WhenBotHasStrongCards() {
+        TrucoCard vira = TrucoCard.of(CardRank.FOUR, CardSuit.SPADES);
+        List<TrucoCard> strongCards = List.of(
+                TrucoCard.of(CardRank.TWO, CardSuit.DIAMONDS),
+                TrucoCard.of(CardRank.ACE, CardSuit.CLUBS),
+                TrucoCard.of(CardRank.KING, CardSuit.HEARTS)
+        );
+
+        List<TrucoCard> openCards = List.of(vira);
+        stepBuilder = GameIntel.StepBuilder.with()
+                .gameInfo(List.of(), openCards, vira, 1)
+                .botInfo(strongCards, 11)
+                .opponentScore(8);
+        assertTrue(lgtbot.decideIfRaises(stepBuilder.build()));
+    }
+
 }
